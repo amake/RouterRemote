@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">RouterRemote</string>
     <string name="action_settings">Settings</string>
+    <string name="pref_username">Username</string>
+    <string name="pref_password">Password</string>
+    <string name="pref_category_server">Server</string>
+    <string name="pref_host">Host</string>
+    <string name="button_vpn_on">VPN On</string>
+    <string name="button_vpn_off">VPN Off</string>
+    <string name="key_username" translatable="false">username</string>
+    <string name="key_password" translatable="false">password</string>
+    <string name="key_host" translatable="false">host</string>
+    <string name="message_vpn_on">VPN is on</string>
+    <string name="message_vpn_off">VPN is off</string>
 </resources>
