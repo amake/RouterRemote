@@ -49,6 +49,7 @@ class MainActivityFragment : Fragment(), JobHolder {
         val pass = getPrefsString(R.string.key_password)!!
         val dryRun = getPrefsBoolean(R.string.key_dry_run)
         button.isEnabled = false
+        textStatus.text = getString(R.string.message_thinking)
         val result = if (dryRun) {
             Toast.makeText(context, R.string.toast_dry_run, Toast.LENGTH_SHORT).show()
             delay(200)
@@ -66,6 +67,7 @@ class MainActivityFragment : Fragment(), JobHolder {
         val host = getPrefsString(R.string.key_host)!!
         val user = getPrefsString(R.string.key_username)!!
         val pass = getPrefsString(R.string.key_password)!!
+        textStatus.text = getString(R.string.message_thinking)
         val status = ddWrtStatusOpenVpn(host, user, pass)
         Log.d(TAG, "VPN status: $status")
         val connected = status != null && status.contains(Regex("""CONNECTED\s+SUCCESS"""))
