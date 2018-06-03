@@ -27,21 +27,26 @@
                 android:id="@+id/textStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="24sp" />
 
             <Button
                 android:id="@+id/buttonVpnOn"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/button_vpn_on" />
+                android:text="@string/button_vpn_on"
+                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/buttonVpnOff"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/button_vpn_off" />
+                android:text="@string/button_vpn_off"
+                android:textSize="18sp" />
 
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
