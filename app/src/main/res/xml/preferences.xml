@@ -14,4 +14,10 @@
             android:title="@string/pref_host"
             android:defaultValue="192.168.1.1"/>
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_category_debug">
+        <CheckBoxPreference
+            android:key="@string/key_dry_run"
+            android:title="@string/pref_dry_run"/>
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
@@ -46,8 +47,15 @@ class MainActivityFragment : Fragment(), JobHolder {
         val host = getPrefsString(R.string.key_host)!!
         val user = getPrefsString(R.string.key_username)!!
         val pass = getPrefsString(R.string.key_password)!!
+        val dryRun = getPrefsBoolean(R.string.key_dry_run)
         button.isEnabled = false
-        val result = ddWrtVpnToggle(host, user, pass, enable)
+        val result = if (dryRun) {
+            Toast.makeText(context, R.string.toast_dry_run, Toast.LENGTH_SHORT).show()
+            delay(200)
+            "Toggle Dry Run"
+        } else {
+            ddWrtVpnToggle(host, user, pass, enable)
+        }
         Log.d(TAG, result)
         button.isEnabled = true
         delay(500)

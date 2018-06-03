@@ -5,11 +5,15 @@
     <string name="pref_password">Password</string>
     <string name="pref_category_server">Server</string>
     <string name="pref_host">Host</string>
+    <string name="pref_category_debug">Debug</string>
+    <string name="pref_dry_run">Dry Run</string>
     <string name="button_vpn_on">VPN On</string>
     <string name="button_vpn_off">VPN Off</string>
     <string name="key_username" translatable="false">username</string>
     <string name="key_password" translatable="false">password</string>
     <string name="key_host" translatable="false">host</string>
+    <string name="key_dry_run" translatable="false">dry_run</string>
     <string name="message_vpn_on">VPN is on</string>
     <string name="message_vpn_off">VPN is off</string>
+    <string name="toast_dry_run">Dry run</string>
 </resources>
