@@ -31,6 +31,10 @@ class MainActivityFragment : Fragment(), JobHolder {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         buttonVpnOn.onClick { doVpnToggle(true, it) }
         buttonVpnOff.onClick { doVpnToggle(false, it) }
+        swipeRefreshLayout.onRefresh {
+            updateVpnStatus()
+            it.isRefreshing = false
+        }
     }
 
     override fun onDestroy() {

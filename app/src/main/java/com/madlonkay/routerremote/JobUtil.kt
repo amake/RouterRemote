@@ -1,5 +1,6 @@
 package com.madlonkay.routerremote
 
+import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.NonCancellable
@@ -23,6 +24,17 @@ fun View.onClick(action: suspend (View) -> Unit) {
     }
     // install a listener to activate this actor
     setOnClickListener {
+        eventActor.offer(Unit)
+    }
+}
+
+fun SwipeRefreshLayout.onRefresh(action: suspend (SwipeRefreshLayout) -> Unit) {
+    // launch one actor as a parent of the context job
+    val eventActor = actor<Unit>(contextJob + UI, capacity = Channel.CONFLATED) {
+        for (event in channel) action(this@onRefresh)
+    }
+    // install a listener to activate this actor
+    setOnRefreshListener {
         eventActor.offer(Unit)
     }
 }
