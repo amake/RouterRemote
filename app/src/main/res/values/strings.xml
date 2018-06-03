@@ -17,4 +17,5 @@
     <string name="message_vpn_off">VPN is off</string>
     <string name="toast_dry_run">Dry run</string>
     <string name="message_thinking">…</string>
+    <string name="message_error">Error</string>
 </resources>

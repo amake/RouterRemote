@@ -9,12 +9,12 @@ import java.net.URL
 
 private const val TAG = "DdWrt"
 
-suspend fun ddWrtVpnToggle(host: String, user: String, pass: String, enable: Boolean): String? {
+suspend fun ddWrtVpnToggle(host: String, user: String, pass: String, enable: Boolean): HttpResult {
     val value = if (enable) "1" else "0"
     return ddWrtApplyuser(host, user, pass, mapOf("openvpncl_enable" to value))
 }
 
-suspend fun ddWrtApplyuser(host: String, user: String, pass: String, data: Map<String, String>): String? = withContext(CommonPool) {
+suspend fun ddWrtApplyuser(host: String, user: String, pass: String, data: Map<String, String>): HttpResult = withContext(CommonPool) {
     val conn = setUpConnection("http://$host/applyuser.cgi", user, pass)
     conn.doOutput = true
     conn.requestMethod = "POST"
@@ -26,23 +26,15 @@ suspend fun ddWrtApplyuser(host: String, user: String, pass: String, data: Map<S
     Log.d(TAG, "Wrote out; going to connect")
     conn.connect()
     Log.d(TAG, "Connected; response=${conn.responseCode}")
-    return@withContext if (conn.responseCode == HttpURLConnection.HTTP_OK) {
-        conn.inputStream
-    } else {
-        conn.errorStream
-    }.bufferedReader().use { it.readText() }
+    return@withContext HttpResult(conn.responseCode, conn.responseMessage, conn.resultText)
 }
 
-suspend fun ddWrtStatusOpenVpn(host: String, user: String, pass: String): String? = withContext(CommonPool) {
+suspend fun ddWrtStatusOpenVpn(host: String, user: String, pass: String): HttpResult = withContext(CommonPool) {
     val conn = setUpConnection("http://$host/Status_OpenVPN.asp", user, pass)
     Log.d(TAG, "Going to connect")
     conn.connect()
     Log.d(TAG, "Connected; response=${conn.responseCode}")
-    return@withContext if (conn.responseCode == HttpURLConnection.HTTP_OK) {
-        conn.inputStream
-    } else {
-        conn.errorStream
-    }.bufferedReader().use { it.readText() }
+    return@withContext HttpResult(conn.responseCode, conn.responseMessage, conn.resultText)
 }
 
 private fun setUpConnection(host: String, user: String, pass: String): HttpURLConnection {

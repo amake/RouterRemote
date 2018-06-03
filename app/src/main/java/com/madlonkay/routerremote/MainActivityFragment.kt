@@ -54,14 +54,22 @@ class MainActivityFragment : Fragment(), JobHolder {
         val dryRun = getPrefsBoolean(R.string.key_dry_run)
         button.isEnabled = false
         textStatus.text = getString(R.string.message_thinking)
-        val result = if (dryRun) {
+        if (dryRun) {
             Toast.makeText(context, R.string.toast_dry_run, Toast.LENGTH_SHORT).show()
             delay(200)
-            "Toggle Dry Run"
+            Log.d(TAG, "Toggle dry run")
         } else {
-            ddWrtVpnToggle(host, user, pass, enable)
+            try {
+                val result = ddWrtVpnToggle(host, user, pass, enable)
+                Log.d(TAG, result.text)
+                if (!result.succeeded) {
+                    Toast.makeText(context, result.responseMessage, Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error trying to toggle OpenVPN", e)
+                Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
         }
-        Log.d(TAG, result)
         button.isEnabled = true
         delay(500)
         updateVpnStatus()
@@ -72,10 +80,20 @@ class MainActivityFragment : Fragment(), JobHolder {
         val user = getPrefsString(R.string.key_username)!!
         val pass = getPrefsString(R.string.key_password)!!
         textStatus.text = getString(R.string.message_thinking)
-        val status = ddWrtStatusOpenVpn(host, user, pass)
-        Log.d(TAG, "VPN status: $status")
-        val connected = status != null && status.contains(Regex("""CONNECTED\s+SUCCESS"""))
-        val resId = if (connected) R.string.message_vpn_on else R.string.message_vpn_off
-        textStatus.text = getString(resId)
+        try {
+            val result = ddWrtStatusOpenVpn(host, user, pass)
+            Log.d(TAG, "VPN status: $result")
+            if (result.succeeded) {
+                val connected = result.text!!.contains(Regex("""CONNECTED\s+SUCCESS"""))
+                val resId = if (connected) R.string.message_vpn_on else R.string.message_vpn_off
+                textStatus.text = getString(resId)
+            } else {
+                textStatus.text = getString(R.string.message_error)
+                Toast.makeText(context, result.responseMessage, Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error trying to get OpenVPN status", e)
+            Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
+        }
     }
 }
