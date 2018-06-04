@@ -48,9 +48,13 @@ class MainActivityFragment : Fragment(), JobHolder {
     }
 
     private suspend fun doVpnToggle(enable: Boolean, button: View) {
-        val host = getPrefsString(R.string.key_host)!!
-        val user = getPrefsString(R.string.key_username)!!
-        val pass = getPrefsString(R.string.key_password)!!
+        val host = getPrefsString(R.string.key_host)
+        val user = getPrefsString(R.string.key_username)
+        val pass = getPrefsString(R.string.key_password)
+        if (host.isNullOrBlank() || user.isNullOrBlank() || pass.isNullOrBlank()) {
+            Toast.makeText(context, R.string.toast_please_configure, Toast.LENGTH_SHORT).show()
+            return
+        }
         val dryRun = getPrefsBoolean(R.string.key_dry_run)
         button.isEnabled = false
         textStatus.text = getString(R.string.message_thinking)
@@ -60,7 +64,7 @@ class MainActivityFragment : Fragment(), JobHolder {
             Log.d(TAG, "Toggle dry run")
         } else {
             try {
-                val result = ddWrtVpnToggle(host, user, pass, enable)
+                val result = ddWrtVpnToggle(host!!, user!!, pass!!, enable)
                 Log.d(TAG, result.text)
                 if (!result.succeeded) {
                     Toast.makeText(context, result.responseMessage, Toast.LENGTH_SHORT).show()
@@ -76,12 +80,17 @@ class MainActivityFragment : Fragment(), JobHolder {
     }
 
     private suspend fun updateVpnStatus() = withContext(UI) {
-        val host = getPrefsString(R.string.key_host)!!
-        val user = getPrefsString(R.string.key_username)!!
-        val pass = getPrefsString(R.string.key_password)!!
         textStatus.text = getString(R.string.message_thinking)
+        val host = getPrefsString(R.string.key_host)
+        val user = getPrefsString(R.string.key_username)
+        val pass = getPrefsString(R.string.key_password)
+        if (host.isNullOrBlank() || user.isNullOrBlank() || pass.isNullOrBlank()) {
+            textStatus.text = getString(R.string.message_unknown)
+            Toast.makeText(context, R.string.toast_please_configure, Toast.LENGTH_SHORT).show()
+            return@withContext
+        }
         try {
-            val result = ddWrtStatusOpenVpn(host, user, pass)
+            val result = ddWrtStatusOpenVpn(host!!, user!!, pass!!)
             Log.d(TAG, "VPN status: $result")
             if (result.succeeded) {
                 val connected = result.text!!.contains(Regex("""CONNECTED\s+SUCCESS"""))

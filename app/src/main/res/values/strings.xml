@@ -18,4 +18,6 @@
     <string name="toast_dry_run">Dry run</string>
     <string name="message_thinking">…</string>
     <string name="message_error">Error</string>
+    <string name="message_unknown">\?</string>
+    <string name="toast_please_configure">Please configure your router in Settings</string>
 </resources>
