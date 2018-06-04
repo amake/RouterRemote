@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 
 private const val TAG = "MainActivityFragment"
+private const val REQUEST_CODE_LOCATION = 1
 
 /**
  * A placeholder fragment containing a simple view.
@@ -48,7 +50,19 @@ class MainActivityFragment : Fragment(), JobHolder {
 
     override fun onResume() {
         super.onResume()
-        launch { updateVpnStatus() }
+        if (!needsLocationPermission || hasLocationPermission) {
+            launch { updateVpnStatus() }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (grantResults.isNotEmpty() && requestCode == REQUEST_CODE_LOCATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                launch { updateVpnStatus() }
+            } else {
+                Toast.makeText(context, R.string.toast_location_required, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private suspend fun doVpnToggle(enable: Boolean, button: View) {
@@ -119,6 +133,10 @@ class MainActivityFragment : Fragment(), JobHolder {
     }
 
     private fun checkNetwork(): Boolean {
+        if (needsLocationPermission && !hasLocationPermission) {
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_CODE_LOCATION)
+            return false
+        }
         if (!onAllowedNetwork) {
             val allowed = getPrefsString(R.string.key_allowed_network)
             val message = getString(R.string.toast_please_connect, allowed)
@@ -127,6 +145,14 @@ class MainActivityFragment : Fragment(), JobHolder {
         }
         return true
     }
+
+    private val needsLocationPermission: Boolean
+        get() = !getPrefsString(R.string.key_allowed_network).isNullOrBlank()
+
+    private val hasLocationPermission: Boolean
+        get() = context?.let {
+            ContextCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        } ?: false
 
     private val onAllowedNetwork: Boolean
         get() {

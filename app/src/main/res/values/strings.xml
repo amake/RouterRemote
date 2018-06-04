@@ -24,4 +24,5 @@
     <string name="message_unknown">\?</string>
     <string name="toast_please_configure">Please configure your router in Settings</string>
     <string name="toast_please_connect">Please connect to %s</string>
+    <string name="toast_location_required">Location permissions are required for SSID lock</string>
 </resources>
