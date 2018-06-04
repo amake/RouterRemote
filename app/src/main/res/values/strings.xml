@@ -7,12 +7,15 @@
     <string name="pref_host">Host</string>
     <string name="pref_category_debug">Debug</string>
     <string name="pref_dry_run">Dry Run</string>
+    <string name="pref_category_advanced">Advanced</string>
+    <string name="pref_allowed_network">Allowed network SSID</string>
     <string name="button_vpn_on">VPN On</string>
     <string name="button_vpn_off">VPN Off</string>
     <string name="key_username" translatable="false">username</string>
     <string name="key_password" translatable="false">password</string>
     <string name="key_host" translatable="false">host</string>
     <string name="key_dry_run" translatable="false">dry_run</string>
+    <string name="key_allowed_network" translatable="false">allowed_network</string>
     <string name="message_vpn_on">VPN is on</string>
     <string name="message_vpn_off">VPN is off</string>
     <string name="toast_dry_run">Dry run</string>
@@ -20,4 +23,5 @@
     <string name="message_error">Error</string>
     <string name="message_unknown">\?</string>
     <string name="toast_please_configure">Please configure your router in Settings</string>
+    <string name="toast_please_connect">Please connect to %s</string>
 </resources>

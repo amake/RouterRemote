@@ -1,5 +1,9 @@
 package com.madlonkay.routerremote
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
@@ -55,6 +59,9 @@ class MainActivityFragment : Fragment(), JobHolder {
             Toast.makeText(context, R.string.toast_please_configure, Toast.LENGTH_SHORT).show()
             return
         }
+        if (!checkNetwork()) {
+            return
+        }
         val dryRun = getPrefsBoolean(R.string.key_dry_run)
         button.isEnabled = false
         textStatus.text = getString(R.string.message_thinking)
@@ -89,6 +96,10 @@ class MainActivityFragment : Fragment(), JobHolder {
             Toast.makeText(context, R.string.toast_please_configure, Toast.LENGTH_SHORT).show()
             return@withContext
         }
+        if (!checkNetwork()) {
+            textStatus.text = getString(R.string.message_unknown)
+            return@withContext
+        }
         try {
             val result = ddWrtStatusOpenVpn(host!!, user!!, pass!!)
             Log.d(TAG, "VPN status: $result")
@@ -106,4 +117,28 @@ class MainActivityFragment : Fragment(), JobHolder {
             Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun checkNetwork(): Boolean {
+        if (!onAllowedNetwork) {
+            val allowed = getPrefsString(R.string.key_allowed_network)
+            val message = getString(R.string.toast_please_connect, allowed)
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
+
+    private val onAllowedNetwork: Boolean
+        get() {
+            val allowed = getPrefsString(R.string.key_allowed_network)
+            val current = currentNetwork
+            // WifiInfo.getSSID() returns the name in quotes if it is valid UTF-8
+            return allowed.isNullOrEmpty() || allowed == current || "\"$allowed\"" == current
+        }
+
+    private val currentNetwork: String?
+        get() {
+            val wifi = context?.getSystemService(Context.WIFI_SERVICE) as WifiManager?
+            return wifi?.connectionInfo?.ssid
+        }
 }

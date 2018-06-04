@@ -15,6 +15,12 @@
             android:defaultValue="192.168.1.1"/>
     </PreferenceCategory>
     <PreferenceCategory
+        android:title="@string/pref_category_advanced">
+        <EditTextPreference
+            android:key="@string/key_allowed_network"
+            android:title="@string/pref_allowed_network"/>
+    </PreferenceCategory>
+    <PreferenceCategory
         android:title="@string/pref_category_debug">
         <CheckBoxPreference
             android:key="@string/key_dry_run"
