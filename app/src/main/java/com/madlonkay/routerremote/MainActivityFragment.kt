@@ -102,6 +102,7 @@ class MainActivityFragment : Fragment(), JobHolder {
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error trying to get OpenVPN status", e)
+            textStatus.text = getString(R.string.message_error)
             Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
         }
     }
