@@ -82,7 +82,7 @@ class MainActivityFragment : Fragment(), JobHolder {
         textStatus.text = getString(R.string.message_thinking)
         if (dryRun) {
             Toast.makeText(context, R.string.toast_dry_run, Toast.LENGTH_SHORT).show()
-            delay(200)
+            delay(500)
             Log.d(TAG, "Toggle dry run")
         } else {
             try {
