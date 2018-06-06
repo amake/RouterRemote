@@ -35,8 +35,8 @@ class MainActivityFragment : Fragment(), JobHolder {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        buttonVpnOn.onClick { doVpnToggle(true, it) }
-        buttonVpnOff.onClick { doVpnToggle(false, it) }
+        buttonVpnOn.onClick { doVpnToggle(true) }
+        buttonVpnOff.onClick { doVpnToggle(false) }
         swipeRefreshLayout.onRefresh {
             updateVpnStatus()
             it.isRefreshing = false
@@ -65,7 +65,7 @@ class MainActivityFragment : Fragment(), JobHolder {
         }
     }
 
-    private suspend fun doVpnToggle(enable: Boolean, button: View) {
+    private suspend fun doVpnToggle(enable: Boolean) {
         val host = getPrefsString(R.string.key_host)
         val user = getPrefsString(R.string.key_username)
         val pass = getPrefsString(R.string.key_password)
@@ -77,7 +77,8 @@ class MainActivityFragment : Fragment(), JobHolder {
             return
         }
         val dryRun = getPrefsBoolean(R.string.key_dry_run)
-        button.isEnabled = false
+        buttonVpnOn.isEnabled = false
+        buttonVpnOff.isEnabled = false
         textStatus.text = getString(R.string.message_thinking)
         if (dryRun) {
             Toast.makeText(context, R.string.toast_dry_run, Toast.LENGTH_SHORT).show()
@@ -95,7 +96,8 @@ class MainActivityFragment : Fragment(), JobHolder {
                 Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
             }
         }
-        button.isEnabled = true
+        buttonVpnOn.isEnabled = true
+        buttonVpnOff.isEnabled = true
         delay(500)
         updateVpnStatus()
     }
