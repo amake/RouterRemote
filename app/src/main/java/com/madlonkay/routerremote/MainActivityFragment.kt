@@ -1,7 +1,10 @@
 package com.madlonkay.routerremote
 
 import android.Manifest
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
@@ -30,6 +33,18 @@ class MainActivityFragment : Fragment(), JobHolder {
 
     override val job = Job()
 
+    private val networkReceiver = object: BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (onWifi) {
+                Log.d(TAG, "Connected to Wi-Fi")
+                launch { updateVpnStatus() }
+            } else {
+                Log.d(TAG, "Not connected to Wi-Fi")
+                textStatus.setText(R.string.message_unknown)
+            }
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_main, container, false)
@@ -42,11 +57,16 @@ class MainActivityFragment : Fragment(), JobHolder {
             updateVpnStatus()
             it.isRefreshing = false
         }
+        context?.apply {
+            val intentFilter = IntentFilter().apply { addAction(ConnectivityManager.CONNECTIVITY_ACTION) }
+            registerReceiver(networkReceiver, intentFilter)
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
+        context?.unregisterReceiver(networkReceiver)
     }
 
     override fun onResume() {
