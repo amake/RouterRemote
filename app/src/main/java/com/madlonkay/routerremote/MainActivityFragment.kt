@@ -3,6 +3,7 @@ package com.madlonkay.routerremote
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -135,6 +136,17 @@ class MainActivityFragment : Fragment(), JobHolder {
     }
 
     private fun checkNetwork(): Boolean {
+        if (!onWifi) {
+            Log.d(TAG, "Not on Wi-Fi")
+            val message = if (ssidIsRestricted) {
+                val allowed = getPrefsString(R.string.key_allowed_network)
+                getString(R.string.toast_please_connect, allowed)
+            } else {
+                getString(R.string.toast_please_connect_wifi)
+            }
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            return false
+        }
         if (ssidIsRestricted && !hasLocationPermission) {
             Log.d(TAG, "Location permissions required but not yet obtained")
             requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_CODE_LOCATION)
@@ -157,6 +169,12 @@ class MainActivityFragment : Fragment(), JobHolder {
         get() = context?.let {
             ContextCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
         } ?: false
+
+    private val onWifi: Boolean
+        get() {
+            val cm = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+            return cm?.activeNetworkInfo?.type == ConnectivityManager.TYPE_WIFI
+        }
 
     private val onAllowedNetwork: Boolean
         get() {
