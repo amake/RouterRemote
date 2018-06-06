@@ -119,8 +119,6 @@ class MainActivityFragment : Fragment(), JobHolder {
         }
         buttonVpnOn.isEnabled = true
         buttonVpnOff.isEnabled = true
-        delay(500)
-        updateVpnStatus()
     }
 
     private suspend fun updateVpnStatus() = withContext(UI) {
