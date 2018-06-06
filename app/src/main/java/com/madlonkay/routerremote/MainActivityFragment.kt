@@ -174,7 +174,7 @@ class MainActivityFragment : Fragment(), JobHolder {
         }
         if (!onAllowedNetwork) {
             val allowed = getPrefsString(R.string.key_allowed_network)
-            Log.d(TAG, "Not connected to required Wi-Fi network '$allowed'")
+            Log.d(TAG, "Not connected to required Wi-Fi network matching '$allowed'")
             val message = getString(R.string.toast_please_connect, allowed)
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             return false
@@ -199,9 +199,15 @@ class MainActivityFragment : Fragment(), JobHolder {
     private val onAllowedNetwork: Boolean
         get() {
             val allowed = getPrefsString(R.string.key_allowed_network)
+            if (allowed.isNullOrEmpty()) {
+                return true
+            }
             val current = currentNetwork
+            if (current.isNullOrBlank()) {
+                return false
+            }
             // WifiInfo.getSSID() returns the name in quotes if it is valid UTF-8
-            return allowed.isNullOrEmpty() || allowed == current || "\"$allowed\"" == current
+            return Regex(allowed!!).matches(current!!.unwrap('"'))
         }
 
     private val currentNetwork: String?
