@@ -136,11 +136,13 @@ class MainActivityFragment : Fragment(), JobHolder {
 
     private fun checkNetwork(): Boolean {
         if (ssidIsRestricted && !hasLocationPermission) {
+            Log.d(TAG, "Location permissions required but not yet obtained")
             requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_CODE_LOCATION)
             return false
         }
         if (!onAllowedNetwork) {
             val allowed = getPrefsString(R.string.key_allowed_network)
+            Log.d(TAG, "Not connected to required Wi-Fi network '$allowed'")
             val message = getString(R.string.toast_please_connect, allowed)
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             return false
