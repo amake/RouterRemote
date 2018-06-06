@@ -20,7 +20,7 @@ suspend fun ddWrtApplyuser(host: String, user: String, pass: String, data: Map<S
     conn.requestMethod = "POST"
     Log.d(TAG, "Going to write out; data=$data")
     conn.outputStream.use { out ->
-        out.write("action=Apply".toByteArray())
+        out.write("action=ApplyTake".toByteArray())
         data.entries.forEach { out.write("&${it.key}=${it.value}".toByteArray()) }
     }
     Log.d(TAG, "Wrote out; going to connect")
