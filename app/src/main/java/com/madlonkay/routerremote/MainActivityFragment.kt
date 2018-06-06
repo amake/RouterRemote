@@ -50,7 +50,7 @@ class MainActivityFragment : Fragment(), JobHolder {
 
     override fun onResume() {
         super.onResume()
-        if (!needsLocationPermission || hasLocationPermission) {
+        if (!ssidIsRestricted || hasLocationPermission) {
             launch { updateVpnStatus() }
         }
     }
@@ -135,7 +135,7 @@ class MainActivityFragment : Fragment(), JobHolder {
     }
 
     private fun checkNetwork(): Boolean {
-        if (needsLocationPermission && !hasLocationPermission) {
+        if (ssidIsRestricted && !hasLocationPermission) {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_CODE_LOCATION)
             return false
         }
@@ -148,7 +148,7 @@ class MainActivityFragment : Fragment(), JobHolder {
         return true
     }
 
-    private val needsLocationPermission: Boolean
+    private val ssidIsRestricted: Boolean
         get() = !getPrefsString(R.string.key_allowed_network).isNullOrBlank()
 
     private val hasLocationPermission: Boolean
