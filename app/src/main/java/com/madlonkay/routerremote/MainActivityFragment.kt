@@ -119,6 +119,16 @@ class MainActivityFragment : Fragment(), JobHolder {
         }
         buttonVpnOn.isEnabled = true
         buttonVpnOff.isEnabled = true
+        val delayTime = if (enable) 1500 else 500
+        for (i in 1..5) {
+            delay(delayTime)
+            val result = updateVpnStatus()
+            if (result == UpdateResult.ERROR
+                    || (enable && result == UpdateResult.ON)
+                    || (!enable && result == UpdateResult.OFF)) {
+                break
+            }
+        }
     }
 
     enum class UpdateResult {
