@@ -11,7 +11,10 @@ private const val TAG = "DdWrt"
 
 suspend fun ddWrtVpnToggle(host: String, user: String, pass: String, enable: Boolean): HttpResult {
     val value = if (enable) "1" else "0"
-    return ddWrtApplyuser(host, user, pass, mapOf("openvpncl_enable" to value))
+    return ddWrtApplyuser(host, user, pass,
+            mapOf("openvpncl_enable" to value,
+                    "submit_button" to "PPTP",
+                    "action" to "ApplyTake"))
 }
 
 suspend fun ddWrtApplyuser(host: String, user: String, pass: String, data: Map<String, String>): HttpResult = withContext(CommonPool) {
@@ -20,8 +23,7 @@ suspend fun ddWrtApplyuser(host: String, user: String, pass: String, data: Map<S
     conn.requestMethod = "POST"
     Log.d(TAG, "Going to write out; data=$data")
     conn.outputStream.use { out ->
-        out.write("action=ApplyTake".toByteArray())
-        data.entries.forEach { out.write("&${it.key}=${it.value}".toByteArray()) }
+        data.entries.forEach { out.write("${it.key}=${it.value}&".toByteArray()) }
     }
     Log.d(TAG, "Wrote out; going to connect")
     conn.connect()
