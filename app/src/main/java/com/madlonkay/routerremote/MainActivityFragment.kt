@@ -121,7 +121,11 @@ class MainActivityFragment : Fragment(), JobHolder {
         buttonVpnOff.isEnabled = true
     }
 
-    private suspend fun updateVpnStatus() = withContext(UI) {
+    enum class UpdateResult {
+        ON, OFF, ERROR, UNKNOWN
+    }
+
+    private suspend fun updateVpnStatus(): UpdateResult = withContext(UI) {
         textStatus.text = getString(R.string.message_thinking)
         val host = getPrefsString(R.string.key_host)
         val user = getPrefsString(R.string.key_username)
@@ -129,12 +133,13 @@ class MainActivityFragment : Fragment(), JobHolder {
         if (host.isNullOrBlank() || user.isNullOrBlank() || pass.isNullOrBlank()) {
             textStatus.text = getString(R.string.message_unknown)
             Toast.makeText(context, R.string.toast_please_configure, Toast.LENGTH_SHORT).show()
-            return@withContext
+            return@withContext UpdateResult.UNKNOWN
         }
         if (!checkNetwork()) {
             textStatus.text = getString(R.string.message_unknown)
-            return@withContext
+            return@withContext UpdateResult.UNKNOWN
         }
+        var ret: UpdateResult
         try {
             val result = ddWrtStatusOpenVpn(host!!, user!!, pass!!)
             Log.d(TAG, "VPN status: $result")
@@ -142,15 +147,19 @@ class MainActivityFragment : Fragment(), JobHolder {
                 val connected = result.text!!.contains(Regex("""CONNECTED\s+SUCCESS"""))
                 val resId = if (connected) R.string.message_vpn_on else R.string.message_vpn_off
                 textStatus.text = getString(resId)
+                ret = if (connected) UpdateResult.ON else UpdateResult.OFF
             } else {
                 textStatus.text = getString(R.string.message_error)
                 Toast.makeText(context, result.responseMessage, Toast.LENGTH_SHORT).show()
+                ret = UpdateResult.ERROR
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error trying to get OpenVPN status", e)
             textStatus.text = getString(R.string.message_error)
             Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
+            ret = UpdateResult.ERROR
         }
+        return@withContext ret
     }
 
     private fun checkNetwork(): Boolean {
