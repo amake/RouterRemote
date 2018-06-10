@@ -33,7 +33,7 @@ class MainActivityFragment : Fragment(), JobHolder {
 
     override val job = Job()
 
-    private val networkReceiver = object: BroadcastReceiver() {
+    private val networkReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (onWifi) {
                 Log.d(TAG, "Connected to Wi-Fi")
