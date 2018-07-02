@@ -12,44 +12,49 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginBottom="20dp"
+            android:text="@string/message_unknown"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/buttonVpnOn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
+        <Button
+            android:id="@+id/buttonVpnOn"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="@string/button_vpn_on"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/buttonVpnOff"
+            app:layout_constraintEnd_toEndOf="@+id/buttonVpnOff"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/buttonVpnOff"
+            app:layout_constraintTop_toBottomOf="@+id/textStatus" />
+
+
+        <Button
+            android:id="@+id/buttonVpnOff"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_vpn_off"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/buttonVpnOn" />
 
-            <TextView
-                android:id="@+id/textStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/message_unknown"
-                android:textAlignment="center"
-                android:textSize="24sp" />
-
-            <Button
-                android:id="@+id/buttonVpnOn"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/button_vpn_on"
-                android:textSize="18sp" />
-
-            <Button
-                android:id="@+id/buttonVpnOff"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/button_vpn_off"
-                android:textSize="18sp" />
-
-        </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>
