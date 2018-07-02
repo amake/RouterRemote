@@ -117,8 +117,6 @@ class MainActivityFragment : Fragment(), JobHolder {
                 Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
             }
         }
-        buttonVpnOn.isEnabled = true
-        buttonVpnOff.isEnabled = true
         val delayTime = if (enable) 1500 else 500
         for (i in 1..5) {
             delay(delayTime)
@@ -129,6 +127,8 @@ class MainActivityFragment : Fragment(), JobHolder {
                 break
             }
         }
+        buttonVpnOn.isEnabled = true
+        buttonVpnOff.isEnabled = true
     }
 
     enum class UpdateResult {
