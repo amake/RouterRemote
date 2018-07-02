@@ -53,6 +53,8 @@ class MainActivityFragment : Fragment(), JobHolder {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         buttonVpnOn.onClick { doVpnToggle(true) }
         buttonVpnOff.onClick { doVpnToggle(false) }
+        progressBarOn.visibility = View.INVISIBLE
+        progressBarOff.visibility = View.INVISIBLE
         swipeRefreshLayout.onRefresh {
             updateVpnStatus()
             it.isRefreshing = false
@@ -100,6 +102,8 @@ class MainActivityFragment : Fragment(), JobHolder {
         val dryRun = getPrefsBoolean(R.string.key_dry_run)
         buttonVpnOn.isEnabled = false
         buttonVpnOff.isEnabled = false
+        val progressBar = if (enable) progressBarOn else progressBarOff
+        progressBar.visibility = View.VISIBLE
         textStatus.text = getString(R.string.message_thinking)
         if (dryRun) {
             Toast.makeText(context, R.string.toast_dry_run, Toast.LENGTH_SHORT).show()
@@ -129,6 +133,7 @@ class MainActivityFragment : Fragment(), JobHolder {
         }
         buttonVpnOn.isEnabled = true
         buttonVpnOff.isEnabled = true
+        progressBar.visibility = View.INVISIBLE
     }
 
     enum class UpdateResult {

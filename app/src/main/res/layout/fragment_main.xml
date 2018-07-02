@@ -41,6 +41,17 @@
             app:layout_constraintStart_toStartOf="@+id/buttonVpnOff"
             app:layout_constraintTop_toBottomOf="@+id/textStatus" />
 
+        <ProgressBar
+            android:id="@+id/progressBarOn"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonVpnOn"
+            app:layout_constraintEnd_toStartOf="@+id/buttonVpnOn"
+            app:layout_constraintTop_toTopOf="@+id/buttonVpnOn" />
 
         <Button
             android:id="@+id/buttonVpnOff"
@@ -54,6 +65,18 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonVpnOn" />
+
+        <ProgressBar
+            android:id="@+id/progressBarOff"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonVpnOff"
+            app:layout_constraintEnd_toStartOf="@+id/buttonVpnOff"
+            app:layout_constraintTop_toTopOf="@+id/buttonVpnOff" />
 
     </android.support.constraint.ConstraintLayout>
 
