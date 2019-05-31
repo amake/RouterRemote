@@ -109,7 +109,7 @@ class MainActivityFragment : Fragment(), JobHolder {
             Log.d(TAG, "Toggle dry run")
         } else {
             try {
-                val result = ddWrtVpnToggle(host!!, user!!, pass!!, enable)
+                val result = ddWrtVpnToggle(host, user, pass, enable)
                 Log.d(TAG, result.text)
                 if (!result.succeeded) {
                     Toast.makeText(context, result.responseMessage, Toast.LENGTH_SHORT).show()
@@ -154,7 +154,7 @@ class MainActivityFragment : Fragment(), JobHolder {
         }
         var ret: UpdateResult
         try {
-            val result = ddWrtStatusOpenVpn(host!!, user!!, pass!!)
+            val result = ddWrtStatusOpenVpn(host, user, pass)
             Log.d(TAG, "VPN status: $result")
             if (result.succeeded) {
                 val connected = result.text!!.contains(Regex("""CONNECTED\s+SUCCESS"""))
@@ -227,7 +227,7 @@ class MainActivityFragment : Fragment(), JobHolder {
                 return false
             }
             // WifiInfo.getSSID() returns the name in quotes if it is valid UTF-8
-            return Regex(allowed!!).matches(current!!.unwrap('"'))
+            return Regex(allowed).matches(current.unwrap('"'))
         }
 
     private val currentNetwork: String?
