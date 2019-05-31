@@ -17,11 +17,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.android.UI
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private const val TAG = "MainActivityFragment"
 private const val REQUEST_CODE_LOCATION = 1
@@ -121,7 +121,7 @@ class MainActivityFragment : Fragment(), JobHolder {
                 Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
             }
         }
-        val delayTime = if (enable) 1500 else 500
+        val delayTime = if (enable) 1500L else 500L
         for (i in 1..5) {
             delay(delayTime)
             val result = updateVpnStatus()

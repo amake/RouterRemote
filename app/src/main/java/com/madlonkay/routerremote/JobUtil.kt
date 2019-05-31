@@ -2,11 +2,11 @@ package com.madlonkay.routerremote
 
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.NonCancellable
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.channels.actor
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.android.UI
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.actor
 
 // From https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md#android
 
