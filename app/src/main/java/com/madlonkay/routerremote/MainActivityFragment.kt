@@ -17,11 +17,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
+import kotlinx.coroutines.android.Main
 import kotlinx.coroutines.android.UI
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 private const val TAG = "MainActivityFragment"
 private const val REQUEST_CODE_LOCATION = 1
@@ -37,7 +35,7 @@ class MainActivityFragment : Fragment(), JobHolder {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (onWifi) {
                 Log.d(TAG, "Connected to Wi-Fi")
-                launch { updateVpnStatus() }
+                GlobalScope.launch { updateVpnStatus() }
             } else {
                 Log.d(TAG, "Not connected to Wi-Fi")
                 textStatus.setText(R.string.message_unknown)
@@ -74,14 +72,14 @@ class MainActivityFragment : Fragment(), JobHolder {
     override fun onResume() {
         super.onResume()
         if (!ssidIsRestricted || hasLocationPermission) {
-            launch { updateVpnStatus() }
+            GlobalScope.launch { updateVpnStatus() }
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (grantResults.isNotEmpty() && requestCode == REQUEST_CODE_LOCATION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                launch { updateVpnStatus() }
+                GlobalScope.launch { updateVpnStatus() }
             } else {
                 Toast.makeText(context, R.string.toast_location_required, Toast.LENGTH_SHORT).show()
             }
@@ -140,7 +138,7 @@ class MainActivityFragment : Fragment(), JobHolder {
         ON, OFF, ERROR, UNKNOWN
     }
 
-    private suspend fun updateVpnStatus(): UpdateResult = withContext(UI) {
+    private suspend fun updateVpnStatus(): UpdateResult = withContext(Dispatchers.Main) {
         textStatus.text = getString(R.string.message_thinking)
         val host = getPrefsString(R.string.key_host)
         val user = getPrefsString(R.string.key_username)

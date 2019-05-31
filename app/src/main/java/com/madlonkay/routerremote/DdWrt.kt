@@ -2,7 +2,7 @@ package com.madlonkay.routerremote
 
 import android.util.Base64
 import android.util.Log
-import kotlinx.coroutines.CommonPool
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
@@ -17,7 +17,7 @@ suspend fun ddWrtVpnToggle(host: String, user: String, pass: String, enable: Boo
                     "action" to "ApplyTake"))
 }
 
-suspend fun ddWrtApplyuser(host: String, user: String, pass: String, data: Map<String, String>): HttpResult = withContext(CommonPool) {
+suspend fun ddWrtApplyuser(host: String, user: String, pass: String, data: Map<String, String>): HttpResult = withContext(Dispatchers.Default) {
     val conn = setUpConnection("http://$host/applyuser.cgi", user, pass)
     conn.doOutput = true
     conn.requestMethod = "POST"
@@ -33,7 +33,7 @@ suspend fun ddWrtApplyuser(host: String, user: String, pass: String, data: Map<S
     return@withContext HttpResult(conn.responseCode, conn.responseMessage, conn.resultText)
 }
 
-suspend fun ddWrtStatusOpenVpn(host: String, user: String, pass: String): HttpResult = withContext(CommonPool) {
+suspend fun ddWrtStatusOpenVpn(host: String, user: String, pass: String): HttpResult = withContext(Dispatchers.Default) {
     val conn = setUpConnection("http://$host/Status_OpenVPN.asp", user, pass)
     Log.d(TAG, "Going to connect")
     conn.connect()
