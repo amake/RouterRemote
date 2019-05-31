@@ -1,6 +1,6 @@
 package com.madlonkay.routerremote
 
-import android.support.v4.widget.SwipeRefreshLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import android.view.View
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
